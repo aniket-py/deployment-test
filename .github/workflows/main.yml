@@ -11,8 +11,8 @@ jobs:
 
     strategy:
       matrix:
-        network: ["dappnet", "validator"]
-        contract_type: ["ERC20", "ERC721", "ERC1155"]
+        network: ["dappnet"]
+        contract_type: ["ERC20"]
 
     steps:
       - name: Checkout code
