@@ -32,11 +32,11 @@ jobs:
       - name: Deploy contract
         run: |
           if [[ "${{ matrix.contract_type }}" == "ERC20" ]]; then
-            npx hardhat run deploy.js --network ${{ matrix.network }}
+            npx hardhat run scripts/deploy.js --network ${{ matrix.network }}
           elif [[ "${{ matrix.contract_type }}" == "ERC721" ]]; then
-            npx hardhat run deploy-nft.js --network ${{ matrix.network }}
+            npx hardhat run scripts/deploy-nft.js --network ${{ matrix.network }}
           else
-            npx hardhat run deploy-erc1155.js --network ${{ matrix.network }}
+            npx hardhat run scripts/deploy-erc1155.js --network ${{ matrix.network }}
           fi
 
       - name: Store deployed contract address
@@ -49,9 +49,9 @@ jobs:
           CONTRACT_ADDRESS: ${{ steps.contract.outputs.contract_address }}
         run: |
           if [[ "${{ matrix.contract_type }}" == "ERC20" ]]; then
-            # Add your ERC20 interaction script here
+            npx hardhat run scripts/interact.js --network ${{ matrix.network }}
           elif [[ "${{ matrix.contract_type }}" == "ERC721" ]]; then
-            # Add your ERC721 interaction script here
+            npx hardhat run scripts/interact-nft.js --network ${{ matrix.network }}
           else
-            # Add your ERC1155 interaction script here
+            npx hardhat run scripts/interact-erc1155.js --network ${{ matrix.network }}
           fi
