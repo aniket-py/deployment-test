@@ -19,7 +19,7 @@ task("accounts", "Prints the list of accounts", async () => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  defaultNetwork: "sphinx",
+  defaultNetwork: "dappnet",
   networks: {
     hardhat: {},
        dappnet: {
@@ -30,7 +30,7 @@ module.exports = {
       accounts: [privateKeys],
     },
     validator: {
-      url: "hhttp://45.79.42.134:8080", // Specify the URL for the validator
+      url: "http://45.79.42.134:8080", // Specify the URL for the validator
       chainId: 8082, // Replace with the actual chain ID
       gas: 2100000,
       gasPrice: 50000000000,
