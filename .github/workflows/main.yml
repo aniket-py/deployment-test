@@ -1,0 +1,57 @@
+name: Automated Contract Deployment and Interaction
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy_and_interact:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        network: ["validator"]
+        contract_type: ["ERC20"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.14.2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Compile contracts
+        run: npx hardhat compile
+
+      - name: Deploy contract
+        run: |
+          if [[ "${{ matrix.contract_type }}" == "ERC20" ]]; then
+            npx hardhat run scripts/deploy.js --network ${{ matrix.network }}
+          elif [[ "${{ matrix.contract_type }}" == "ERC721" ]]; then
+            npx hardhat run scripts/deploy-nft.js --network ${{ matrix.network }}
+          else
+            npx hardhat run scripts/deploy-erc1155.js --network ${{ matrix.network }}
+          fi
+
+      - name: Store deployed contract address
+        id: contract
+        run: |
+          echo "::set-output name=contract_address::$(cat contract-info.json)"
+
+      - name: Interact with deployed contract
+        env:
+          CONTRACT_ADDRESS: ${{ steps.contract.outputs.contract_address }}
+        run: |
+          if [[ "${{ matrix.contract_type }}" == "ERC20" ]]; then
+            npx hardhat run scripts/interact.js --network ${{ matrix.network }}
+          elif [[ "${{ matrix.contract_type }}" == "ERC721" ]]; then
+            npx hardhat run scripts/interact-nft.js --network ${{ matrix.network }}
+          else
+            npx hardhat run scripts/interact-erc1155.js --network ${{ matrix.network }}
+          fi
