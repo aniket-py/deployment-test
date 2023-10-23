@@ -1,6 +1,4 @@
-# deployment-test
 # Automated Contract Deployment and Interaction
-
 This GitHub Actions workflow is designed to automate the deployment and interaction with Ethereum contracts on different networks using Hardhat.
 
 ## Overview
