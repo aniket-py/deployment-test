@@ -1,10 +1,10 @@
 const { ethers } = require("hardhat");
 const fs = require("fs");
-
+require("dotenv").config();
 async function main() {
   const [deployer] = await ethers.getSigners();
 
-  const contractAddress = "0xddf1362eeb5c6c839ed59012079476edd6873cd9"; // Replace with your contract's address
+  const contractAddress = dotenv.config().parsed.CONTRACT_ADDRESS; // Replace with your contract's address
 
   const MyERC1155 = await ethers.getContractFactory("MyERC1155");
   const myERC1155 = await MyERC1155.attach(contractAddress);

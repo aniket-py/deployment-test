@@ -1,10 +1,10 @@
 const { ethers } = require("hardhat");
-
+require("dotenv").config();
 async function main() {
   const [deployer] = await ethers.getSigners();
 
   // Replace with the address of the deployed testToken contract
-  const contractAddress = "0xaa63428dd119ca80e1f5618b5239b407e56c6bf6";
+  const contractAddress = dotenv.config().parsed.CONTRACT_ADDRESS;
 
   // Connect to the contract
   const testTokenContract = await ethers.getContractAt("testToken", contractAddress);
