@@ -3,7 +3,7 @@ name: Automated Contract Deployment and Interaction
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy_and_interact:
