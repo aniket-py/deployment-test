@@ -1,9 +1,7 @@
 name: Automated Contract Deployment and Interaction workflow
 
 on:
-  push:
-    branches:
-      - debug
+  workflow_dispatch
 
 jobs:
   deploy_erc20:
