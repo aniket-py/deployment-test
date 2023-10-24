@@ -44,14 +44,8 @@ jobs:
       - name: Store deployed ERC20 contract address
         run: |
             NEW_CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
-            # Read the current .env.local file and update the CONTRACT_ADDRESS line
-            while IFS= read -r line; do
-                if [[ $line == "CONTRACT_ADDRESS="* ]]; then
-                    echo "CONTRACT_ADDRESS=\"$NEW_CONTRACT_ADDRESS\"" >> .env.local
-                else
-                    echo "$line" >> .env.local
-                fi
-            done < .env.local
+            # Update the .env.local file with the new contract address
+            echo "CONTRACT_ADDRESS=\"$NEW_CONTRACT_ADDRESS\"" >> .env.local
             echo "::add-mask::CONTRACT_ADDRESS=\"$NEW_CONTRACT_ADDRESS\""
         shell: bash
 
@@ -98,14 +92,8 @@ jobs:
       - name: Store deployed ERC721 contract address
         run: |
             NEW_CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
-            # Read the current .env.local file and update the CONTRACT_ADDRESS line
-            while IFS= read -r line; do
-                if [[ $line == "CONTRACT_ADDRESS="* ]]; then
-                    echo "CONTRACT_ADDRESS=\"$NEW_CONTRACT_ADDRESS\"" >> .env.local
-                else
-                    echo "$line" >> .env.local
-                fi
-            done < .env.local
+            # Update the .env.local file with the new contract address
+            echo "CONTRACT_ADDRESS=\"$NEW_CONTRACT_ADDRESS\"" >> .env.local
             echo "::add-mask::CONTRACT_ADDRESS=\"$NEW_CONTRACT_ADDRESS\""
         shell: bash
 
@@ -152,14 +140,8 @@ jobs:
       - name: Store deployed ERC1155 contract address
         run: |
             NEW_CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
-            # Read the current .env.local file and update the CONTRACT_ADDRESS line
-            while IFS= read -r line; do
-                if [[ $line == "CONTRACT_ADDRESS="* ]]; then
-                    echo "CONTRACT_ADDRESS=\"$NEW_CONTRACT_ADDRESS\"" >> .env.local
-                else
-                    echo "$line" >> .env.local
-                fi
-            done < .env.local
+            # Update the .env.local file with the new contract address
+            echo "CONTRACT_ADDRESS=\"$NEW_CONTRACT_ADDRESS\"" >> .env.local
             echo "::add-mask::CONTRACT_ADDRESS=\"$NEW_CONTRACT_ADDRESS\""
         shell: bash
 
