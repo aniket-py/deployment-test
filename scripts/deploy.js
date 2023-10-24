@@ -11,7 +11,7 @@ async function main() {
 
   await testToken.deployed();
   
-  console.log("CONTRACT_ADDRESS=", testToken.address);
+  console.log('CONTRACT_ADDRESS=' + testToken.address);
   const contractInfo = {
     address: testToken.address,
     abi: testToken.interface.format("json"),

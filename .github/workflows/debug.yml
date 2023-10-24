@@ -1,4 +1,4 @@
-name: Set GitHub Environment Variables from .env
+name: Smart Contract Testing
 
 on:
   push:
@@ -6,26 +6,31 @@ on:
       - debug
 
 jobs:
-  set_github_env:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Load environment variables from .env
-        run: |
-          cp .env .env.local
-          echo "::add-mask::$(< .env.local)"
-        shell: bash
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 18.14.2
 
-      - name: Read and set environment variables
-        run: |
-          while IFS= read -r line; do
-            # Export each line from .env.local as a GitHub environment variable
-            export $line
-          done < .env.local
-        shell: bash
+    - name: Install dependencies
+      run: npm install
 
-      - name: Show GitHub environment variables
-        run: env
+    - name: Compile and deploy contracts
+      id: deploy
+      run: |
+        npx hardhat compile
+        output=$(npx hardhat run scripts/deploy.js --network TESTNET)
+        echo ::set-output name=contract_address::${output#CONTRACT_ADDRESS=}
+        
+    - name: Test contracts
+      run: npx hardhat test
+
+    - name: Interact with contracts
+      run: |
+        npx hardhat run scripts/interact.js --network TESTNET --contractAddress ${{ steps.deploy.outputs.contract_address }}
