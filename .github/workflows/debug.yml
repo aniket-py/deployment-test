@@ -22,12 +22,16 @@ jobs:
       run: npm install
 
     - name: Compile and deploy contracts
-      id: deploy
       run: |
         npx hardhat compile
-        output=$(npx hardhat run scripts/deploy.js --network TESTNET)
-        echo ::set-output name=contract_address::${output#CONTRACT_ADDRESS=}
+        npx hardhat run scripts/deploy.js --network TESTNET
+
+    - name: Capture contract address
+      id: capture-contract-address
+      run: |
+        contract_address=$(cat contract-address.txt)
+        echo "CONTRACT_ADDRESS=$contract_address" >> $GITHUB_ENV
 
     - name: Interact with contracts
       run: |
-        npx hardhat run scripts/interact.js --network TESTNET --contractAddress ${{ steps.deploy.outputs.contract_address }}
+        npx hardhat run scripts/interact.js --network TESTNET

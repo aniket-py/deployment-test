@@ -16,9 +16,9 @@ async function main() {
     address: testToken.address,
     abi: testToken.interface.format("json"),
   };
-
+  const contractAddress = testToken.address;
   fs.writeFileSync('contract-info.json', JSON.stringify(contractInfo, null, 2));
-
+  fs.writeFileSync('contract-address.txt', contractAddress);
   //console.log("Contract address and ABI saved to contract-info.json");
 }
 
