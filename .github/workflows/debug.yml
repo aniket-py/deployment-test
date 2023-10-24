@@ -38,7 +38,7 @@ jobs:
         run: |
           echo "CONTRACT_TYPE=$CONTRACT_TYPE"
         env:
-          CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
+          CONTRACT_TYPE: ${{ env.local.CONTRACT_TYPE }}
 
       - name: Install dependencies
         run: npm install
