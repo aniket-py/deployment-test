@@ -40,7 +40,13 @@ jobs:
         run: npx hardhat run scripts/deploy.js --network TESTNET
         env:
           CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
-
+      
+      - name: Get contract address
+        run: echo "CONTRACT_ADDRESS=$(${{ steps.deployment_erc20.outputs.stdout }})" >> .env.local
+             cp .env .env.local
+             echo "::add-mask::$(< .env.local)"
+        shell: bash
+        
       - name: Interact with deployed ERC20 contract
         run: |
           export CONTRACT_ADDRESS=$(${{ steps.deployment_erc20.outputs.stdout }})
@@ -49,8 +55,4 @@ jobs:
           CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
           CONTRACT_ADDRESS: ${{ steps.deployment_erc20.outputs.stdout }}
 
-      - name: Get contract address
-        run: echo "CONTRACT_ADDRESS=$(${{ steps.deployment_erc20.outputs.stdout }})" >> .env.local
-            cp .env .env.local
-            echo "::add-mask::$(< .env.local)"
-        shell: bash
+      
