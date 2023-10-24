@@ -6,7 +6,7 @@ on:
       - debug
 
 jobs:
-  deploy_and_interact:
+  deploy_and_interact_erc20:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,10 +26,7 @@ jobs:
 
       - name: Set CONTRACT_TYPE
         run: |
-          if [[ -z "$CONTRACT_TYPE" ]]; then
-            echo "CONTRACT_TYPE is not set. Defaulting to ERC20."
-            export CONTRACT_TYPE="ERC20"
-          fi
+          export CONTRACT_TYPE="ERC20"
         shell: bash
 
       - name: Install dependencies
@@ -38,46 +35,114 @@ jobs:
       - name: Compile contracts
         run: npx hardhat compile
 
-      - name: Deploy contract
-        id: deployment
-        run: |
-          if [[ "$CONTRACT_TYPE" == "ERC20" ]]; then
-            echo "Debug: Deploying ERC20 contract"
-            npx hardhat run scripts/deploy.js --network TESTNET
-          elif [[ "$CONTRACT_TYPE" == "ERC721" ]]; then
-            echo "Debug: Deploying ERC721 contract"
-            npx hardhat run scripts/deploy-nft.js --network TESTNET
-          elif [[ "$CONTRACT_TYPE" == "ERC1155" ]]; then
-            echo "Debug: Deploying ERC1155 contract"
-            npx hardhat run scripts/deploy-erc1155.js --network TESTNET
-          else
-            echo "Invalid CONTRACT_TYPE: $CONTRACT_TYPE"
-            exit 1
-          fi
+      - name: Deploy ERC20 contract
+        id: deployment_erc20
+        run: npx hardhat run scripts/deploy.js --network TESTNET
         env:
           CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
 
-      - name: Store deployed contract address
+      - name: Store deployed ERC20 contract address
         run: |
           NEW_CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
           echo "CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS" >> .env.local
           echo "::add-mask::CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS"
         shell: bash
 
-      - name: Interact with deployed contract
+      - name: Interact with deployed ERC20 contract
+        run: npx hardhat run scripts/interact.js --network TESTNET
+        env:
+          CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
+
+  deploy_and_interact_erc721:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.14.2  # Choose your desired Node.js version
+
+      - name: Load environment variables from .env
         run: |
-          if [[ "$CONTRACT_TYPE" == "ERC20" ]]; then
-            echo "Debug: Interacting with ERC20 contract"
-            npx hardhat run scripts/interact.js --network TESTNET
-          elif [[ "$CONTRACT_TYPE" == "ERC721" ]]; then
-            echo "Debug: Interacting with ERC721 contract"
-            npx hardhat run scripts/interact-nft.js --network TESTNET
-          elif [[ "$CONTRACT_TYPE" == "ERC1155" ]]; then
-            echo "Debug: Interacting with ERC1155 contract"
-            npx hardhat run scripts/interact-erc1155.js --network TESTNET
-          else
-            echo "Invalid CONTRACT_TYPE: $CONTRACT_TYPE"
-            exit 1
-          fi
+          cp .env .env.local
+          echo "::add-mask::$(< .env.local)"
+        shell: bash
+
+      - name: Set CONTRACT_TYPE
+        run: |
+          export CONTRACT_TYPE="ERC721"
+        shell: bash
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Compile contracts
+        run: npx hardhat compile
+
+      - name: Deploy ERC721 contract
+        id: deployment_erc721
+        run: npx hardhat run scripts/deploy-nft.js --network TESTNET
+        env:
+          CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
+
+      - name: Store deployed ERC721 contract address
+        run: |
+          NEW_CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
+          echo "CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS" >> .env.local
+          echo "::add-mask::CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS"
+        shell: bash
+
+      - name: Interact with deployed ERC721 contract
+        run: npx hardhat run scripts/interact-nft.js --network TESTNET
+        env:
+          CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
+
+  deploy_and_interact_erc1155:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.14.2  # Choose your desired Node.js version
+
+      - name: Load environment variables from .env
+        run: |
+          cp .env .env.local
+          echo "::add-mask::$(< .env.local)"
+        shell: bash
+
+      - name: Set CONTRACT_TYPE
+        run: |
+          export CONTRACT_TYPE="ERC1155"
+        shell: bash
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Compile contracts
+        run: npx hardhat compile
+
+      - name: Deploy ERC1155 contract
+        id: deployment_erc1155
+        run: npx hardhat run scripts/deploy-erc1155.js --network TESTNET
+        env:
+          CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
+
+      - name: Store deployed ERC1155 contract address
+        run: |
+          NEW_CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
+          echo "CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS" >> .env.local
+          echo "::add-mask::CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS"
+        shell: bash
+
+      - name: Interact with deployed ERC1155 contract
+        run: npx hardhat run scripts/interact-erc1155.js --network TESTNET
         env:
           CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
