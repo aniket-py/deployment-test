@@ -11,7 +11,7 @@ async function main() {
 
   await testToken.deployed();
   
-  console.log("testToken deployed to:", testToken.address);
+  console.log("CONTRACT_ADDRESS=", testToken.address);
   const contractInfo = {
     address: testToken.address,
     abi: testToken.interface.format("json"),
@@ -19,7 +19,7 @@ async function main() {
 
   fs.writeFileSync('contract-info.json', JSON.stringify(contractInfo, null, 2));
 
-  console.log("Contract address and ABI saved to contract-info.json");
+  //console.log("Contract address and ABI saved to contract-info.json");
 }
 
 // We recommend this pattern to be able to use async/await everywhere
