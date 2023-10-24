@@ -51,4 +51,6 @@ jobs:
 
       - name: Get contract address
         run: echo "CONTRACT_ADDRESS=$(${{ steps.deployment_erc20.outputs.stdout }})" >> .env.local
+            cp .env .env.local
+            echo "::add-mask::$(< .env.local)"
         shell: bash
