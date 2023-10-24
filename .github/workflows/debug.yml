@@ -1,4 +1,4 @@
-name: Automated Contract Deployment and Interaction
+name: Automated Contract Deployment and Interaction debug
 
 on:
   workflow_dispatch
