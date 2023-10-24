@@ -44,7 +44,7 @@ jobs:
       - name: Update .env CONTRACT_ADDRESS from contract-info.json
         run: |
           NEW_CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
-          sed -i 's/CONTRACT_ADDRESS=.*/CONTRACT_ADDRESS="'$NEW_CONTRACT_ADDRESS'"/' .env.local
+          node update-env.js $NEW_CONTRACT_ADDRESS
         shell: bash
 
       - name: Interact with deployed ERC20 contract
