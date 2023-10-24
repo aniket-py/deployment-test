@@ -33,15 +33,15 @@ jobs:
       - name: Deploy contract
         id: deployment
         run: |
-          if [[ "$ENV" == "ERC20" ]]; then
+          if [[ "$CONTRACT_TYPE" == "ERC20" ]]; then
             npx hardhat run scripts/deploy.js --network TESTNET
-          elif [[ "$ENV" == "ERC721" ]]; then
+          elif [[ "$CONTRACT_TYPE" == "ERC721" ]]; then
             npx hardhat run scripts/deploy-nft.js --network TESTNET
-          elif [[ "$ENV" == "ERC1155" ]]; then
+          elif [[ "$CONTRACT_TYPE" == "ERC1155" ]]; then
             npx hardhat run scripts/deploy-erc1155.js --network TESTNET
           fi
         env:
-          ENV: ${{ env.CONTRACT_TYPE }}
+          CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
 
       - name: Store deployed contract address
         run: |
@@ -53,12 +53,12 @@ jobs:
 
       - name: Interact with deployed contract
         run: |
-          if [[ "$ENV" == "ERC20" ]]; then
+          if [[ "$CONTRACT_TYPE" == "ERC20" ]]; then
             npx hardhat run scripts/interact.js --network TESTNET
-          elif [[ "$ENV" == "ERC721" ]]; then
+          elif [[ "$CONTRACT_TYPE" == "ERC721" ]]; then
             npx hardhat run scripts/interact-nft.js --network TESTNET
-          elif [[ "$ENV" == "ERC1155" ]]; then
+          elif [[ "$CONTRACT_TYPE" == "ERC1155" ]]; then
             npx hardhat run scripts/interact-erc1155.js --network TESTNET
           fi
         env:
-          ENV: ${{ env.CONTRACT_TYPE }}
+          CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
