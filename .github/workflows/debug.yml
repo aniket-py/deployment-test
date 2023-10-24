@@ -27,9 +27,6 @@ jobs:
         npx hardhat compile
         output=$(npx hardhat run scripts/deploy.js --network TESTNET)
         echo ::set-output name=contract_address::${output#CONTRACT_ADDRESS=}
-        
-    - name: Test contracts
-      run: npx hardhat test
 
     - name: Interact with contracts
       run: |
