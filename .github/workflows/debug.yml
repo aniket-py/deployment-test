@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 18.14.2  # or your desired Node.js version
+          node-version: 18.14.2  # Choose your desired Node.js version
 
       - name: Load environment variables from .env
         run: |
@@ -24,33 +24,19 @@ jobs:
           echo "::add-mask::$(< .env.local)"
         shell: bash
 
-      - name: Debug - List files in the directory
+      - name: Set CONTRACT_TYPE
         run: |
-          ls -al
-        working-directory: ${{ github.workspace }}
-
-      - name: Debug - Print contents of .env.local
-        run: |
-          cat .env.local
-        working-directory: ${{ github.workspace }}
-
-      - name: Debug - Print value of CONTRACT_TYPE
-        run: |
-          echo "CONTRACT_TYPE=$CONTRACT_TYPE"
-        env:
-          CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
+          if [[ -z "$CONTRACT_TYPE" ]]; then
+            echo "CONTRACT_TYPE is not set. Defaulting to ERC20."
+            export CONTRACT_TYPE="ERC20"
+          fi
+        shell: bash
 
       - name: Install dependencies
         run: npm install
 
       - name: Compile contracts
         run: npx hardhat compile
-
-      - name: Debug - Check the contract type
-        run: |
-          echo "Debug: CONTRACT_TYPE=$CONTRACT_TYPE"
-        env:
-          CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
 
       - name: Deploy contract
         id: deployment
@@ -64,6 +50,9 @@ jobs:
           elif [[ "$CONTRACT_TYPE" == "ERC1155" ]]; then
             echo "Debug: Deploying ERC1155 contract"
             npx hardhat run scripts/deploy-erc1155.js --network TESTNET
+          else
+            echo "Invalid CONTRACT_TYPE: $CONTRACT_TYPE"
+            exit 1
           fi
         env:
           CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
@@ -74,12 +63,6 @@ jobs:
           echo "CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS" >> .env.local
           echo "::add-mask::CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS"
         shell: bash
-        working-directory: ${{ github.workspace }}
-
-      - name: Debug - Print CONTRACT_ADDRESS
-        run: |
-          cat .env.local
-        working-directory: ${{ github.workspace }}
 
       - name: Interact with deployed contract
         run: |
@@ -92,6 +75,9 @@ jobs:
           elif [[ "$CONTRACT_TYPE" == "ERC1155" ]]; then
             echo "Debug: Interacting with ERC1155 contract"
             npx hardhat run scripts/interact-erc1155.js --network TESTNET
+          else
+            echo "Invalid CONTRACT_TYPE: $CONTRACT_TYPE"
+            exit 1
           fi
         env:
           CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
