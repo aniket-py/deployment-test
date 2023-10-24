@@ -1,9 +1,7 @@
-name: Smart Contract Testing
+name: Automated Contract Deployment and Interaction
 
 on:
-  push:
-    branches:
-      - debug
+  workflow_dispatch
 
 jobs:
   deploy_erc20:
