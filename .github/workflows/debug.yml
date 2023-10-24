@@ -6,9 +6,8 @@ on:
       - debug
 
 jobs:
-  test:
+  deploy_erc20:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -21,17 +20,75 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Compile and deploy contracts
+    - name: Compile and deploy ERC20 contract
       run: |
         npx hardhat compile
-        npx hardhat run scripts/deploy.js --network TESTNET
+        npx hardhat run scripts/deploy-erc20.js --network TESTNET
 
-    - name: Capture contract address
-      id: capture-contract-address
+    - name: Capture ERC20 contract address
+      id: capture-erc20-address
       run: |
-        contract_address=$(cat contract-address.txt)
-        echo "CONTRACT_ADDRESS=$contract_address" >> $GITHUB_ENV
+        contract_address=$(cat erc20-contract-address.txt)
+        echo "ERC20_CONTRACT_ADDRESS=$contract_address" >> $GITHUB_ENV
 
-    - name: Interact with contracts
+    - name: Interact with ERC20 contract
       run: |
-        npx hardhat run scripts/interact.js --network TESTNET
+        npx hardhat run scripts/interact-erc20.js --network TESTNET
+
+  deploy_erc721:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 18.14.2
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Compile and deploy ERC721 contract
+      run: |
+        npx hardhat compile
+        npx hardhat run scripts/deploy-nft.js --network TESTNET
+
+    - name: Capture ERC721 contract address
+      id: capture-erc721-address
+      run: |
+        contract_address=$(cat erc721-contract-address.txt)
+        echo "ERC721_CONTRACT_ADDRESS=$contract_address" >> $GITHUB_ENV
+
+    - name: Interact with ERC721 contract
+      run: |
+        npx hardhat run scripts/interact-nft.js --network TESTNET
+
+  deploy_erc1155:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 18.14.2
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Compile and deploy ERC1155 contract
+      run: |
+        npx hardhat compile
+        npx hardhat run scripts/deploy-erc1155.js --network TESTNET
+
+    - name: Capture ERC1155 contract address
+      id: capture-erc1155-address
+      run: |
+        contract_address=$(cat erc1155-contract-address.txt)
+        echo "ERC1155_CONTRACT_ADDRESS=$contract_address" >> $GITHUB_ENV
+
+    - name: Interact with ERC1155 contract
+      run: |
+        npx hardhat run scripts/interact-erc1155.js --network TESTNET

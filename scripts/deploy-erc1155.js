@@ -10,9 +10,9 @@ async function main() {
   const myERC1155 = await MyERC1155.deploy();
 
   await myERC1155.deployed();
-
+  const contractAddress = myERC1155.address;
   console.log("CONTRACT_ADDRESS=", myERC1155.address);
-
+  fs.writeFileSync('contract-address.txt', contractAddress);
   // Save contract address and ABI to a JSON file
   const contractInfo = {
     address: myERC1155.address,

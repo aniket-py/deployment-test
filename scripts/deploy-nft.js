@@ -10,9 +10,9 @@ async function main() {
   const myNFT = await MyNFT.deploy();
 
   await myNFT.deployed();
-
+  const contractAddress = myNFT.address;
   console.log("CONTRACT_ADDRESS=", myNFT.address);
-
+  fs.writeFileSync('contract-address.txt', contractAddress);
   const contractInfo = {
     address: myNFT.address,
     abi: MyNFT.interface.format("json"),
