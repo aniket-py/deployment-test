@@ -9,11 +9,6 @@ jobs:
   deploy_and_interact:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        network: ["dappnet"]
-        contract_type: ["ERC20"]
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -21,7 +16,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 18.14.2
+          node-version: 18.14.2  # or your desired Node.js version
+
+      - name: Load environment variables from .env
+        run: |
+          cp .env .env.local
+          echo "::add-mask::$(< .env.local)"
+        shell: bash
 
       - name: Install dependencies
         run: npm install
@@ -32,27 +33,32 @@ jobs:
       - name: Deploy contract
         id: deployment
         run: |
-          if [[ "${{ matrix.contract_type }}" == "ERC20" ]]; then
-            npx hardhat run scripts/deploy.js --network ${{ matrix.network }}
-          elif [[ "${{ matrix.contract_type }}" == "ERC721" ]]; then
-            npx hardhat run scripts/deploy-nft.js --network ${{ matrix.network }}
-          else
-            npx hardhat run scripts/deploy-erc1155.js --network ${{ matrix.network }}
+          if [[ "$ENV" == "ERC20" ]]; then
+            npx hardhat run scripts/deploy.js --network TESTNET
+          elif [[ "$ENV" == "ERC721" ]]; then
+            npx hardhat run scripts/deploy-nft.js --network TESTNET
+          elif [[ "$ENV" == "ERC1155" ]]; then
+            npx hardhat run scripts/deploy-erc1155.js --network TESTNET
           fi
+        env:
+          ENV: ${{ env.CONTRACT_TYPE }}
 
       - name: Store deployed contract address
         run: |
-          echo "::set-output name=contract_address::$(cat contract-info.json)"
+          NEW_CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
+          echo "CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS" >> .env.local
+          echo "::add-mask::CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS"
         shell: bash
+        working-directory: ${{ github.workspace }}
 
       - name: Interact with deployed contract
-        env:
-          CONTRACT_ADDRESS: ${{ steps.deployment.outputs.contract_address }}
         run: |
-          if [[ "${{ matrix.contract_type }}" == "ERC20" ]]; then
-            npx hardhat run scripts/interact.js --network ${{ matrix.network }} --contractAddress $CONTRACT_ADDRESS
-          elif [[ "${{ matrix.contract_type }}" == "ERC721" ]]; then
-            npx hardhat run scripts/interact-nft.js --network ${{ matrix.network }} --contractAddress $CONTRACT_ADDRESS
-          else
-            npx hardhat run scripts/interact-erc1155.js --network ${{ matrix.network }} --contractAddress $CONTRACT_ADDRESS
+          if [[ "$ENV" == "ERC20" ]]; then
+            npx hardhat run scripts/interact.js --network TESTNET
+          elif [[ "$ENV" == "ERC721" ]]; then
+            npx hardhat run scripts/interact-nft.js --network TESTNET
+          elif [[ "$ENV" == "ERC1155" ]]; then
+            npx hardhat run scripts/interact-erc1155.js --network TESTNET
           fi
+        env:
+          ENV: ${{ env.CONTRACT_TYPE }}

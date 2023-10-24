@@ -3,8 +3,8 @@ require("dotenv").config();
 async function main() {
   const [deployer] = await ethers.getSigners();
   const chainId = 8081; // Replace with your chain ID if needed
-  const contractAddress = dotenv.config().parsed.CONTRACT_ADDRESS;
-
+  const contractAddress = process.env.CONTRACT_ADDRESS;
+  console.log("contractAddress:", contractAddress);
   // Use Hardhat's provider for the Shard chain
   const provider = ethers.provider;
 

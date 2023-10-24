@@ -4,8 +4,8 @@ async function main() {
   const [deployer] = await ethers.getSigners();
 
   // Replace with the address of the deployed testToken contract
-  const contractAddress = dotenv.config().parsed.CONTRACT_ADDRESS;
-
+  const contractAddress = process.env.CONTRACT_ADDRESS;
+  console.log("contractAddress:", contractAddress);
   // Connect to the contract
   const testTokenContract = await ethers.getContractAt("testToken", contractAddress);
 

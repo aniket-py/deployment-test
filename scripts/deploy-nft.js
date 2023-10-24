@@ -18,9 +18,9 @@ async function main() {
     abi: MyNFT.interface.format("json"),
   };
 
-  fs.writeFileSync('nft-contract-info.json', JSON.stringify(contractInfo, null, 2));
+  fs.writeFileSync('contract-info.json', JSON.stringify(contractInfo, null, 2));
 
-  console.log("Contract address and ABI saved to nft-contract-info.json");
+  console.log("Contract address and ABI saved to contract-info.json");
 }
 
 main()
