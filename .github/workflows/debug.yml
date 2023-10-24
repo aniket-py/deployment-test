@@ -41,15 +41,14 @@ jobs:
         env:
           CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
 
-      - name: Get deployed ERC20 contract address
-        id: get_contract_address_erc20
-        run: |
-          CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
-          echo "CONTRACT_ADDRESS=$CONTRACT_ADDRESS" >> .env.local
-          echo "::add-mask::CONTRACT_ADDRESS=$CONTRACT_ADDRESS"
-        shell: bash
-
       - name: Interact with deployed ERC20 contract
-        run: npx hardhat run scripts/interact.js --network TESTNET
+        run: |
+          export CONTRACT_ADDRESS=$(${{ steps.deployment_erc20.outputs.stdout }})
+          npx hardhat run scripts/interact.js --network TESTNET
         env:
           CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
+          CONTRACT_ADDRESS: ${{ steps.deployment_erc20.outputs.stdout }}
+
+      - name: Get contract address
+        run: echo "CONTRACT_ADDRESS=$(${{ steps.deployment_erc20.outputs.stdout }})" >> .env.local
+        shell: bash
