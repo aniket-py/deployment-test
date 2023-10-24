@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 18.14.2
+          node-version: 18.14.2  # Choose your desired Node.js version
 
       - name: Load environment variables from .env
         run: |
@@ -41,10 +41,12 @@ jobs:
         env:
           CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
 
-      - name: Update .env CONTRACT_ADDRESS from contract-info.json
+      - name: Get deployed ERC20 contract address
+        id: get_contract_address_erc20
         run: |
-          NEW_CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
-          node update-env.js $NEW_CONTRACT_ADDRESS
+          CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
+          echo "CONTRACT_ADDRESS=$CONTRACT_ADDRESS" >> .env.local
+          echo "::add-mask::CONTRACT_ADDRESS=$CONTRACT_ADDRESS"
         shell: bash
 
       - name: Interact with deployed ERC20 contract
