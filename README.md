@@ -1,49 +1,54 @@
 # Automated Contract Deployment and Interaction
-This GitHub Actions workflow is designed to automate the deployment and interaction with Ethereum contracts on different networks using Hardhat.
 
-## Overview
+This GitHub Actions workflow allows you to automate the deployment and interaction with ERC20, ERC721, and ERC1155 smart contracts on the TESTNET network. The workflow runs sequentially, ensuring that each contract is deployed before interaction.
 
-This workflow deploys three types of contracts (ERC20, ERC721, and ERC1155) to specified networks (e.g., "dappnet" and "validator"). After deployment, it interacts with the deployed contracts.
+## Getting Started
 
-## Trigger
+To use this workflow, follow the steps below:
 
-The workflow is triggered automatically on every push to the `master` branch.
+### Prerequisites
 
-## Matrix Strategy
+- You need a GitHub repository containing your contract code and deployment scripts.
+- Ensure you have configured your `hardhat.config.js` and script files accordingly.
 
-The workflow uses a matrix strategy for network and contract type, allowing deployment and interaction with different contract types on different networks.
+### Usage
 
-- Network: ["dappnet", "validator"]
-- Contract Type: ["ERC20", "ERC721", "ERC1155"]
+1. **Push Code to the Repository:**
 
-## Steps
+   - Push your code, including your smart contract code and deployment scripts, to your GitHub repository.
+   - Make sure to set up your project with the necessary dependencies.
 
-1. **Checkout code:** This step checks out the code from the repository.
+2. **Create GitHub Secrets:**
 
-2. **Setup Node.js:** It sets up Node.js with version 18.14.2 for executing the workflow.
+   - Go to your GitHub repository and navigate to the "Settings" tab.
+   - In the left sidebar, click on "Secrets."
+   - Add the following secrets:
+     - `PRIVATE_KEY`: Your Ethereum wallet private key for contract deployment.
+     - `NETWORK_NAME`: The network name (e.g., "TESTNET") where you want to deploy your contracts.
+     - Add any other secrets required by your scripts.
 
-3. **Install dependencies:** This step installs project dependencies using npm.
+3. **Run the Workflow:**
 
-4. **Compile contracts:** The contracts are compiled using Hardhat.
+   - Click on the "Actions" tab in your GitHub repository.
+   - Select "Automated Contract Deployment and Interaction."
+   - Click the "Run workflow" button.
+   - Choose the branch (e.g., "master") where your code is located.
+   - Click the "Run workflow" button to trigger the deployment and interaction process.
 
-5. **Deploy contract:** It deploys the contract based on the matrix configuration for network and contract type. Deployment scripts are located in the `scripts` directory.
+4. **Monitor the Workflow:**
 
-6. **Store deployed contract address:** This step stores the contract address in the `contract-info.json` file.
+   - The workflow will automatically compile, deploy, and interact with your ERC20, ERC721, and ERC1155 contracts.
+   - You can check the progress and see the logs in the GitHub Actions workflow dashboard.
 
-7. **Interact with deployed contract:** It interacts with the deployed contract based on the contract type and network configuration. Interaction scripts are located in the `scripts` directory.
+5. **Access Contract Addresses:**
 
-## Environment Variables
+   - The workflow captures the contract addresses and sets them as environment variables:
+     - `CONTRACT_ADDRESS`: General contract address.
+     - `ERC20_CONTRACT_ADDRESS`: ERC20 contract address.
+     - `ERC721_CONTRACT_ADDRESS`: ERC721 contract address.
+     - `ERC1155_CONTRACT_ADDRESS`: ERC1155 contract address.
+   - You can access these addresses in your subsequent actions or scripts.
 
-- `CONTRACT_ADDRESS`: This environment variable is set with the contract address obtained from the deployment step, allowing interaction scripts to use the correct contract address.
+## Contributing
 
-## Usage
-
-1. Create deployment and interaction scripts for your specific contracts. Make sure they match the contract names and configurations in your project.
-
-2. Customize the deployment and interaction scripts in the matrix strategy section to match your specific needs.
-
-3. Push your code to the `master` branch to trigger the workflow. It will deploy and interact with contracts based on the matrix configurations.
-
-## License
-
-This GitHub Actions pipeline is provided under the [MIT License](LICENSE).
+If you encounter issues, have suggestions, or want to contribute to this project, feel free to open an issue or submit a pull request. Your contributions are welcome!
