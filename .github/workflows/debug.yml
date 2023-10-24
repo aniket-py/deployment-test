@@ -2,11 +2,6 @@ name: Automated Contract Deployment and Interaction
 
 on:
   workflow_dispatch:
-    inputs:
-      CONTRACT_TYPE:
-        description: 'Contract type to deploy'
-        required: true
-        default: 'ERC20'
 
 jobs:
   deploy_and_interact_erc20:
