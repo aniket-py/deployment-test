@@ -1,7 +1,7 @@
 name: Automated Contract Deployment and Interaction
 
 on:
-  workflow_dispatch:
+  workflow_dispatch
 
 jobs:
   deploy_and_interact_erc20:
