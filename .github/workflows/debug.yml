@@ -55,9 +55,9 @@ jobs:
 
       - name: Store deployed ERC20 contract address
         run: |
-          NEW_CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
-          echo "CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS" >> .env.local
-          echo "::add-mask::CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS"
+            NEW_CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
+            echo "CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS" >> .env.local
+            echo "::add-mask::CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS"
         shell: bash
 
       - name: Debug - Contract Address
