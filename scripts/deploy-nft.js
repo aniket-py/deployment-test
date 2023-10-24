@@ -12,7 +12,7 @@ async function main() {
   await myNFT.deployed();
   const contractAddress = myNFT.address;
   console.log("CONTRACT_ADDRESS=", myNFT.address);
-  fs.writeFileSync('contract-address.txt', contractAddress);
+  fs.writeFileSync('erc721-contract-address.txt', contractAddress);
   const contractInfo = {
     address: myNFT.address,
     abi: MyNFT.interface.format("json"),

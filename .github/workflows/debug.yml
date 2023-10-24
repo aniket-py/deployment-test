@@ -23,17 +23,17 @@ jobs:
     - name: Compile and deploy ERC20 contract
       run: |
         npx hardhat compile
-        npx hardhat run scripts/deploy-erc20.js --network TESTNET
+        npx hardhat run scripts/deploy.js --network TESTNET
 
     - name: Capture ERC20 contract address
       id: capture-erc20-address
       run: |
-        contract_address=$(cat erc20-contract-address.txt)
+        contract_address=$(cat contract-address.txt)
         echo "ERC20_CONTRACT_ADDRESS=$contract_address" >> $GITHUB_ENV
 
     - name: Interact with ERC20 contract
       run: |
-        npx hardhat run scripts/interact-erc20.js --network TESTNET
+        npx hardhat run scripts/interact.js --network TESTNET
 
   deploy_erc721:
     runs-on: ubuntu-latest
