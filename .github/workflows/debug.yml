@@ -1,7 +1,9 @@
-name: Automated Contract Deployment and Interaction debug
+name: Automated Contract Deployment and Interaction
 
 on:
-  workflow_dispatch
+  push:
+    branches:
+      - debug
 
 jobs:
   deploy_and_interact_erc20:
@@ -27,20 +29,11 @@ jobs:
           export CONTRACT_TYPE="ERC20"
         shell: bash
 
-      - name: Debug - CONTRACT_TYPE
-        run: |
-          echo "Debug: CONTRACT_TYPE=$CONTRACT_TYPE"
-        env:
-          CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
-
       - name: Install dependencies
         run: npm install
 
       - name: Compile contracts
         run: npx hardhat compile
-
-      - name: Debug - Compile result
-        run: ls -al
 
       - name: Deploy ERC20 contract
         id: deployment_erc20
@@ -48,15 +41,13 @@ jobs:
         env:
           CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
 
-      - name: Debug - Deploy result
-        run: ls -al
-
-      - name: Store deployed ERC20 contract address
+      - name: Update .env CONTRACT_ADDRESS from contract-info.json
         run: |
-            NEW_CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
-            echo "CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS" >> .env.local
-            echo "::add-mask::CONTRACT_ADDRESS=$NEW_CONTRACT_ADDRESS"
+          NEW_CONTRACT_ADDRESS=$(cat contract-info.json | jq -r '.address')
+          sed -i 's/CONTRACT_ADDRESS=.*/CONTRACT_ADDRESS="'$NEW_CONTRACT_ADDRESS'"/' .env.local
         shell: bash
 
-      - name: Debug - Contract Address
-        run: cat .env.local
+      - name: Interact with deployed ERC20 contract
+        run: npx hardhat run scripts/interact.js --network TESTNET
+        env:
+          CONTRACT_TYPE: ${{ env.CONTRACT_TYPE }}
