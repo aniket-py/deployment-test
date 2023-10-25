@@ -21,7 +21,7 @@ jobs:
     - name: Compile and deploy ERC20 contract
       run: |
         npx hardhat compile
-        npx hardhat run scripts/deploy.js --network TESTNET
+        npx hardhat run scripts/deploy-erc20.js --network TESTNET
 
     - name: Capture ERC20 contract address
       id: capture-erc20-address
@@ -31,7 +31,7 @@ jobs:
 
     - name: Interact with ERC20 contract
       run: |
-        npx hardhat run scripts/interact.js --network TESTNET
+        npx hardhat run scripts/interact-erc20.js --network TESTNET
 
   deploy_erc721:
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
     - name: Compile and deploy ERC721 contract
       run: |
         npx hardhat compile
-        npx hardhat run scripts/deploy-nft.js --network TESTNET
+        npx hardhat run scripts/deploy-erc721.js --network TESTNET
 
     - name: Capture ERC721 contract address
       id: capture-erc721-address
@@ -61,7 +61,7 @@ jobs:
 
     - name: Interact with ERC721 contract
       run: |
-        npx hardhat run scripts/interact-nft.js --network TESTNET
+        npx hardhat run scripts/interact-721.js --network TESTNET
 
   deploy_erc1155:
     runs-on: ubuntu-latest
@@ -81,7 +81,7 @@ jobs:
     - name: Compile and deploy ERC1155 contract
       run: |
         npx hardhat compile
-        npx hardhat run scripts/deploy-erc1155.js --network TESTNET
+        npx hardhat run scripts/deploy-erc1155-new.js --network TESTNET
 
     - name: Capture ERC1155 contract address
       id: capture-erc1155-address
@@ -91,4 +91,4 @@ jobs:
 
     - name: Interact with ERC1155 contract
       run: |
-        npx hardhat run scripts/interact-erc1155.js --network TESTNET
+        npx hardhat run scripts/interact-erc1155-new.js --network TESTNET
