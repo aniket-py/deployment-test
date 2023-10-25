@@ -61,7 +61,7 @@ jobs:
 
     - name: Interact with ERC721 contract
       run: |
-        npx hardhat run scripts/interact-721.js --network TESTNET
+        npx hardhat run scripts/interact-erc721.js --network TESTNET
 
   deploy_erc1155:
     runs-on: ubuntu-latest
