@@ -26,12 +26,7 @@ async function main() {
   await burnTx.wait();
   console.log(`Burned ERC-721 token with ID ${tokenIdToBurn}`);
 
-  // Call the setTokenURI function
-  const tokenIdToSetURI = 1; // Replace with the actual token ID
-  const newTokenURI = "https://example.com/token/1"; // Replace with the actual URI
-  const setURITx = await erc721Contract.setTokenURI(tokenIdToSetURI, newTokenURI);
-  await setURITx.wait();
-  console.log(`Set URI for ERC-721 token with ID ${tokenIdToSetURI} to ${newTokenURI}`);
+
 }
 
 main()

@@ -15,10 +15,6 @@ contract MyExtendedERC721Token is ERC721, Ownable {
         _burn(tokenId);
     }
 
-    function setTokenURI(uint256 tokenId, string memory tokenURI) public onlyOwner {
-        _setTokenURI(tokenId, tokenURI);
-    }
-
     function ownerOfToken(uint256 tokenId) public view returns (address) {
         return ownerOf(tokenId);
     }
